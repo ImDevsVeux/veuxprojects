@@ -7,5 +7,6 @@ return {
     "b87ca1bb-c919-452e-8d53-107a864bd7db", -- q
     "1749D08D-8F76-40DF-AC72-47A29E594EA8", -- e.1
     "5b60a906-c034-49d2-b251-f9a922a0335e", -- sk
-    "4725bf38-5132-4e51-aa54-1fc1eba88ebd" -- frog
+    "4725bf38-5132-4e51-aa54-1fc1eba88ebd", -- frog
+    "c343789b-fd6f-4644-9da5-ed8952c8b37c"  -- veu
 }
