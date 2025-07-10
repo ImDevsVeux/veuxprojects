@@ -1,0 +1,42 @@
+-- Permanent Ban File Path
+local banFile = "veux_ban.json"
+
+-- Ban HWID Function
+local function getHWID()
+    return game:GetService("RbxAnalyticsService"):GetClientId()
+end
+
+-- Auto Ban if File Exists
+if isfile(banFile) then
+    game.Players.LocalPlayer:Kick("You Have Been Permeant Banned From using Our Scripts.")
+    return
+end
+
+-- Expected Secure URL (do not touch)
+local officialURL = "https://raw.githubusercontent.com/ImDevsVeux/veuxprojects/refs/heads/main/_729_928_018_90_157"
+
+-- Check if someone changed the URL
+local usedURL = officialURL -- this variable MUST NOT be changed by anyone
+
+if usedURL ~= officialURL then
+    writefile(banFile, getHWID())
+    game.Players.LocalPlayer:Kick("You Have Been Permeant Banned From using Our Scripts.")
+    return
+end
+
+-- Try to get HWID list
+local success, HWIDTable = pcall(function()
+    return loadstring(game:HttpGet(usedURL))()
+end)
+
+-- HWID Check
+if success and type(HWIDTable) == "table" then
+    local hwid = getHWID()
+    if table.find(HWIDTable, hwid) then
+        print("Access granted")
+    else
+        game.Players.LocalPlayer:Kick("Unauthorized device detected. Access denied.")
+    end
+else
+    warn("Failed to fetch HWID list.")
+end
