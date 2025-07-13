@@ -25,7 +25,7 @@ G2L["1"]["ResetOnSpawn"] = false;
 -- StarterGui.SynapseX.FloatingIcon
 G2L["2"] = Instance.new("ImageButton", G2L["1"]);
 G2L["2"]["BackgroundColor3"] = Color3.fromRGB(61, 61, 61);
-G2L["2"]["Size"] = UDim2.new(0, 36, 0, 36);
+G2L["2"]["Size"] = UDim2.new(0, 0, 0, 0);
 G2L["2"]["Name"] = [[FloatingIcon]];
 G2L["2"].Visible = false
 G2L["2"]["Position"] = UDim2.new(0.7019911956787109, 0, 0.7092568278312683, 0);
