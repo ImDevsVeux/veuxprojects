@@ -8,30 +8,29 @@ document.addEventListener('DOMContentLoaded', function() {
     const dropdownBtn = document.querySelector('.dropdown-btn');
     const dropdownContent = document.querySelector('.dropdown-content');
     
-    // Discord OAuth URL
+    // Discord OAuth URL (now points to auth.html)
     const discordAuthUrl = 'https://discord.com/oauth2/authorize?client_id=1206450272428236810&redirect_uri=' + 
-                          encodeURIComponent(window.location.origin + window.location.pathname) + 
+                          encodeURIComponent(window.location.origin + '/auth.html') + 
                           '&response_type=token&scope=identify';
     
-    // Check for access token in URL fragment
-    function handleAuthRedirect() {
-        const hash = window.location.hash.substring(1);
-        if (!hash) return;
+    // Check for stored token
+    function checkAuthStatus() {
+        const token = sessionStorage.getItem('discord_token');
+        if (token) {
+            fetchDiscordUser(token);
+        }
         
-        const params = new URLSearchParams(hash);
-        const accessToken = params.get('access_token');
-        
-        if (accessToken) {
-            // User is authenticated, fetch user data
-            fetchDiscordUser(accessToken);
-            
-            // Clear the hash from URL without reload
-            history.replaceState(null, null, ' ');
+        // Check for auth errors
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('auth_error')) {
+            alert('Authentication failed. Please try again.');
+            // Clean the URL
+            window.history.replaceState({}, document.title, window.location.pathname);
         }
     }
     
-    // Initial check for auth token
-    handleAuthRedirect();
+    // Initial auth check
+    checkAuthStatus();
     
     // Discord button click handler
     discordBtn.addEventListener('click', function() {
@@ -41,14 +40,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Start button click handler
     document.querySelector('.start-btn').addEventListener('click', function() {
         alert('Starting without signing in!');
-        // Add your functionality here
     });
     
     // Dropdown functionality
     dropdownBtn.addEventListener('click', function() {
         dropdownContent.classList.toggle('active');
-        
-        // Change button text based on state
         dropdownBtn.textContent = dropdownContent.classList.contains('active') 
             ? 'Hide Updates' 
             : 'Check Updates';
@@ -63,16 +59,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
             
-            if (!response.ok) {
-                throw new Error('Failed to fetch user data');
-            }
+            if (!response.ok) throw new Error('Failed to fetch user data');
             
             const user = await response.json();
             updateUserUI(user);
             
         } catch (error) {
             console.error('Error fetching user data:', error);
-            alert('Failed to load user data. Please try again.');
+            sessionStorage.removeItem('discord_token');
+            alert('Failed to load user data. Please sign in again.');
         }
     }
     
@@ -81,7 +76,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (user.avatar) {
             userAvatar.src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=128`;
         } else {
-            // Default avatar if user has none
             const defaultAvatarNumber = user.discriminator % 5;
             userAvatar.src = `https://cdn.discordapp.com/embed/avatars/${defaultAvatarNumber}.png`;
         }
