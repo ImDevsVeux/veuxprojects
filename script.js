@@ -7,37 +7,21 @@ document.addEventListener('DOMContentLoaded', function() {
     const usernameSpan = document.getElementById('username');
     const dropdownBtn = document.querySelector('.dropdown-btn');
     const dropdownContent = document.querySelector('.dropdown-content');
+    const startBtn = document.querySelector('.start-btn');
     
-    // Discord OAuth URL - MUST MATCH EXACTLY what's in Discord Dev Portal
+    // Discord OAuth URL
     const discordAuthUrl = 'https://discord.com/oauth2/authorize?client_id=1206450272428236810&redirect_uri=' + 
                          encodeURIComponent('https://custommovesetmakerv20.netlify.app/auth.html') + 
                          '&response_type=token&scope=identify';
     
-    // Set dropdown content
-    dropdownContent.innerHTML = `
-        <h3>Q - Why U Need Our Discord Account to Sign up?</h3>
-        <p>= To make sure I are keep connect With Us Always..</p>
-        
-        <ul class="security-list">
-            <li>We DO NOT IP LOG OR ANYTHING</li>
-            <li>We Just Get Your Username To Keep u Connect with us</li>
-        </ul>
-        
-        <h3>= Why We need to do it?</h3>
-        <p>- So u can Get In events and Updates!</p>
-        
-        <div class="signup-cta">
-            <p>== SO Sign Up NOW..</p>
-            <p>- If u are still worried about That it's some Ip log Website so Check Out this -</p>
-            <a href="#" class="safety-link">Website Safety Information</a>
-        </div>
-    `;
-    
-    // Check for stored token
+    // Check authentication status
     function checkAuthStatus() {
         const token = sessionStorage.getItem('discord_token');
         if (token) {
             fetchDiscordUser(token);
+            setupLoggedInUI();
+        } else {
+            setupLoggedOutUI();
         }
         
         // Check for auth errors
@@ -46,6 +30,47 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Authentication failed. Please try again.');
             window.history.replaceState({}, document.title, window.location.pathname);
         }
+    }
+    
+    // Setup UI for logged-in users
+    function setupLoggedInUI() {
+        // Change buttons
+        startBtn.innerHTML = "Let's Start!";
+        discordBtn.style.display = 'none';
+        
+        // Change dropdown
+        dropdownBtn.textContent = 'Updates';
+        dropdownContent.innerHTML = `
+            <p>Updates: Custom Moveset Maker New Ui And Fixed All Shits Bug</p>
+        `;
+    }
+    
+    // Setup UI for logged-out users
+    function setupLoggedOutUI() {
+        // Reset buttons
+        startBtn.innerHTML = 'Start!!<br><span class="subtext">without Sign in</span>';
+        discordBtn.style.display = 'flex';
+        
+        // Reset dropdown
+        dropdownBtn.textContent = 'IMPORTANT: CLICK HERE';
+        dropdownContent.innerHTML = `
+            <h3>Q - Why U Need Our Discord Account to Sign up?</h3>
+            <p>= To make sure I are keep connect With Us Always..</p>
+            
+            <ul class="security-list">
+                <li>We DO NOT IP LOG OR ANYTHING</li>
+                <li>We Just Get Your Username To Keep u Connect with us</li>
+            </ul>
+            
+            <h3>= Why We need to do it?</h3>
+            <p>- So u can Get In events and Updates!</p>
+            
+            <div class="signup-cta">
+                <p>== SO Sign Up NOW..</p>
+                <p>- If u are still worried about That it's some Ip log Website so Check Out this -</p>
+                <a href="#" class="safety-link">Website Safety Information</a>
+            </div>
+        `;
     }
     
     // Initial auth check
@@ -57,16 +82,24 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Start button click handler
-    document.querySelector('.start-btn').addEventListener('click', function() {
-        alert('Starting without signing in!');
+    startBtn.addEventListener('click', function() {
+        alert(sessionStorage.getItem('discord_token') 
+            ? "Let's get started!" 
+            : "Starting without signing in!");
     });
     
     // Dropdown functionality
     dropdownBtn.addEventListener('click', function() {
         dropdownContent.classList.toggle('active');
-        this.textContent = dropdownContent.classList.contains('active') 
-            ? 'Hide Information' 
-            : 'IMPORTANT: CLICK HERE';
+        if (sessionStorage.getItem('discord_token')) {
+            this.textContent = dropdownContent.classList.contains('active') 
+                ? 'Hide Updates' 
+                : 'Updates';
+        } else {
+            this.textContent = dropdownContent.classList.contains('active') 
+                ? 'Hide Information' 
+                : 'IMPORTANT: CLICK HERE';
+        }
     });
     
     // Safety link handler
@@ -74,7 +107,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.target.classList.contains('safety-link')) {
             e.preventDefault();
             alert('Safety information will be shown here. Replace this with your actual safety documentation link.');
-            // window.open('YOUR_SAFETY_LINK_HERE', '_blank');
         }
     });
     
@@ -96,6 +128,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error:', error);
             sessionStorage.removeItem('discord_token');
             alert('Session expired. Please sign in again.');
+            setupLoggedOutUI();
         }
     }
     
