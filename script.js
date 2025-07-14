@@ -8,10 +8,30 @@ document.addEventListener('DOMContentLoaded', function() {
     const dropdownBtn = document.querySelector('.dropdown-btn');
     const dropdownContent = document.querySelector('.dropdown-content');
     
-    // Discord OAuth URL (now points to auth.html)
+    // Discord OAuth URL - MUST MATCH EXACTLY what's in Discord Dev Portal
     const discordAuthUrl = 'https://discord.com/oauth2/authorize?client_id=1206450272428236810&redirect_uri=' + 
-                          encodeURIComponent(window.location.origin + '/auth.html') + 
-                          '&response_type=token&scope=identify';
+                         encodeURIComponent('https://custommovesetmakerv20.netlify.app/auth.html') + 
+                         '&response_type=token&scope=identify';
+    
+    // Set dropdown content
+    dropdownContent.innerHTML = `
+        <h3>Q - Why U Need Our Discord Account to Sign up?</h3>
+        <p>= To make sure I are keep connect With Us Always..</p>
+        
+        <ul class="security-list">
+            <li>We DO NOT IP LOG OR ANYTHING</li>
+            <li>We Just Get Your Username To Keep u Connect with us</li>
+        </ul>
+        
+        <h3>= Why We need to do it?</h3>
+        <p>- So u can Get In events and Updates!</p>
+        
+        <div class="signup-cta">
+            <p>== SO Sign Up NOW..</p>
+            <p>- If u are still worried about That it's some Ip log Website so Check Out this -</p>
+            <a href="#" class="safety-link">Website Safety Information</a>
+        </div>
+    `;
     
     // Check for stored token
     function checkAuthStatus() {
@@ -24,7 +44,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.has('auth_error')) {
             alert('Authentication failed. Please try again.');
-            // Clean the URL
             window.history.replaceState({}, document.title, window.location.pathname);
         }
     }
@@ -45,12 +64,21 @@ document.addEventListener('DOMContentLoaded', function() {
     // Dropdown functionality
     dropdownBtn.addEventListener('click', function() {
         dropdownContent.classList.toggle('active');
-        dropdownBtn.textContent = dropdownContent.classList.contains('active') 
-            ? 'Hide Updates' 
-            : 'Check Updates';
+        this.textContent = dropdownContent.classList.contains('active') 
+            ? 'Hide Information' 
+            : 'IMPORTANT: CLICK HERE';
     });
     
-    // Function to fetch Discord user data
+    // Safety link handler
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('safety-link')) {
+            e.preventDefault();
+            alert('Safety information will be shown here. Replace this with your actual safety documentation link.');
+            // window.open('YOUR_SAFETY_LINK_HERE', '_blank');
+        }
+    });
+    
+    // Fetch Discord user data
     async function fetchDiscordUser(token) {
         try {
             const response = await fetch('https://discord.com/api/users/@me', {
@@ -65,20 +93,17 @@ document.addEventListener('DOMContentLoaded', function() {
             updateUserUI(user);
             
         } catch (error) {
-            console.error('Error fetching user data:', error);
+            console.error('Error:', error);
             sessionStorage.removeItem('discord_token');
-            alert('Failed to load user data. Please sign in again.');
+            alert('Session expired. Please sign in again.');
         }
     }
     
     // Update UI with user data
     function updateUserUI(user) {
-        if (user.avatar) {
-            userAvatar.src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=128`;
-        } else {
-            const defaultAvatarNumber = user.discriminator % 5;
-            userAvatar.src = `https://cdn.discordapp.com/embed/avatars/${defaultAvatarNumber}.png`;
-        }
+        userAvatar.src = user.avatar 
+            ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=128`
+            : `https://cdn.discordapp.com/embed/avatars/${user.discriminator % 5}.png`;
         
         usernameSpan.textContent = user.username;
         authButtons.classList.add('hidden');
