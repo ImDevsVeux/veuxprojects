@@ -15,6 +15,54 @@ body {
     align-items: center;
     padding: 20px;
 }
+/* Add these to your existing CSS */
+
+.dropdown-content h3 {
+    color: #4CAF50;
+    margin: 15px 0 5px 0;
+    font-size: 1.1rem;
+}
+
+.dropdown-content p {
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.security-list {
+    margin: 10px 0;
+    padding-left: 20px;
+}
+
+.security-list li {
+    margin-bottom: 8px;
+    position: relative;
+    color: #ccc;
+}
+
+.security-list li:before {
+    content: "•";
+    color: #4CAF50;
+    position: absolute;
+    left: -15px;
+}
+
+.signup-cta {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #333;
+}
+
+.safety-link {
+    color: #4CAF50;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+    margin-top: 5px;
+}
+
+.safety-link:hover {
+    text-decoration: underline;
+}
 
 .container {
     position: relative;
