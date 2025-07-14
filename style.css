@@ -17,6 +17,7 @@ body {
 }
 
 .container {
+    position: relative;
     max-width: 800px;
     width: 100%;
     text-align: center;
@@ -24,6 +25,33 @@ body {
     background-color: rgba(0, 0, 0, 0.7);
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0, 255, 0, 0.2);
+}
+
+.user-profile {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.user-profile.hidden {
+    display: none;
+}
+
+.avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #4CAF50;
+}
+
+.username {
+    font-size: 0.9rem;
+    color: #ccc;
 }
 
 .title {
@@ -128,23 +156,6 @@ body {
     margin-bottom: 10px;
 }
 
-.dropdown-content ul {
-    list-style-type: none;
-    padding-left: 20px;
-}
-
-.dropdown-content li {
-    margin-bottom: 8px;
-    position: relative;
-}
-
-.dropdown-content li:before {
-    content: "•";
-    color: #4CAF50;
-    position: absolute;
-    left: -15px;
-}
-
 /* Responsive Design */
 @media (max-width: 768px) {
     .container {
@@ -159,6 +170,11 @@ body {
         padding: 12px 25px;
         font-size: 1rem;
     }
+    
+    .user-profile {
+        position: static;
+        margin-bottom: 20px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -169,4 +185,4 @@ body {
     .buttons-container {
         gap: 15px;
     }
-  }
+}
