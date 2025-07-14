@@ -1,3 +1,4 @@
+/* Base Styles */
 * {
     margin: 0;
     padding: 0;
@@ -16,6 +17,7 @@ body {
 }
 
 .container {
+    position: relative;
     max-width: 800px;
     width: 100%;
     text-align: center;
@@ -23,7 +25,33 @@ body {
     background-color: rgba(0, 0, 0, 0.7);
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0, 255, 0, 0.2);
-    position: relative;
+}
+
+.user-profile {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.user-profile.hidden {
+    display: none;
+}
+
+.avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #4CAF50;
+}
+
+.username {
+    font-size: 0.9rem;
+    color: #ccc;
 }
 
 .title {
@@ -89,28 +117,6 @@ body {
     font-size: 1.3rem;
 }
 
-.user-profile {
-    display: none;
-    position: absolute;
-    top: 40px;
-    right: 40px;
-    text-align: center;
-}
-
-.user-pfp {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    border: 2px solid #4CAF50;
-    margin-bottom: 10px;
-}
-
-#user-username {
-    font-size: 1rem;
-    color: #fff;
-    text-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
-}
-
 .dropdown {
     margin-top: 20px;
 }
@@ -166,13 +172,8 @@ body {
     }
     
     .user-profile {
-        top: 20px;
-        right: 20px;
-    }
-    
-    .user-pfp {
-        width: 50px;
-        height: 50px;
+        position: static;
+        margin-bottom: 20px;
     }
 }
 
@@ -183,15 +184,5 @@ body {
     
     .buttons-container {
         gap: 15px;
-    }
-    
-    .user-profile {
-        top: 15px;
-        right: 15px;
-    }
-    
-    .user-pfp {
-        width: 40px;
-        height: 40px;
     }
     }
