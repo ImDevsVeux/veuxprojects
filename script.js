@@ -9,17 +9,29 @@ document.addEventListener('DOMContentLoaded', function() {
     const dropdownContent = document.querySelector('.dropdown-content');
     
     // Discord OAuth URL
-    const discordAuthUrl = 'https://discord.com/oauth2/authorize?client_id=1206450272428236810&redirect_uri=https%3A%2F%2Fcustommovesetmakerv20.netlify.app%2Fauth&response_type=token&scope=identify';
+    const discordAuthUrl = 'https://discord.com/oauth2/authorize?client_id=1206450272428236810&redirect_uri=' + 
+                          encodeURIComponent(window.location.origin + window.location.pathname) + 
+                          '&response_type=token&scope=identify';
     
     // Check for access token in URL fragment
-    const hash = window.location.hash.substring(1);
-    const params = new URLSearchParams(hash);
-    const accessToken = params.get('access_token');
-    
-    if (accessToken) {
-        // User is authenticated, fetch user data
-        fetchDiscordUser(accessToken);
+    function handleAuthRedirect() {
+        const hash = window.location.hash.substring(1);
+        if (!hash) return;
+        
+        const params = new URLSearchParams(hash);
+        const accessToken = params.get('access_token');
+        
+        if (accessToken) {
+            // User is authenticated, fetch user data
+            fetchDiscordUser(accessToken);
+            
+            // Clear the hash from URL without reload
+            history.replaceState(null, null, ' ');
+        }
     }
+    
+    // Initial check for auth token
+    handleAuthRedirect();
     
     // Discord button click handler
     discordBtn.addEventListener('click', function() {
@@ -37,11 +49,9 @@ document.addEventListener('DOMContentLoaded', function() {
         dropdownContent.classList.toggle('active');
         
         // Change button text based on state
-        if (dropdownContent.classList.contains('active')) {
-            dropdownBtn.textContent = 'Hide Updates';
-        } else {
-            dropdownBtn.textContent = 'Check Updates';
-        }
+        dropdownBtn.textContent = dropdownContent.classList.contains('active') 
+            ? 'Hide Updates' 
+            : 'Check Updates';
     });
     
     // Function to fetch Discord user data
@@ -58,17 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             const user = await response.json();
-            
-            // Update UI with user data
-            userAvatar.src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=128`;
-            usernameSpan.textContent = user.username;
-            
-            // Hide auth buttons and show profile
-            authButtons.classList.add('hidden');
-            userProfile.classList.remove('hidden');
-            
-            // Remove token from URL
-            window.history.replaceState({}, document.title, window.location.pathname);
+            updateUserUI(user);
             
         } catch (error) {
             console.error('Error fetching user data:', error);
@@ -76,13 +76,18 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Helper function to handle URL parameters
-    function getParameterByName(name, url = window.location.href) {
-        name = name.replace(/[\[\]]/g, '\\$&');
-        const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
-        const results = regex.exec(url);
-        if (!results) return null;
-        if (!results[2]) return '';
-        return decodeURIComponent(results[2].replace(/\+/g, ' '));
+    // Update UI with user data
+    function updateUserUI(user) {
+        if (user.avatar) {
+            userAvatar.src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=128`;
+        } else {
+            // Default avatar if user has none
+            const defaultAvatarNumber = user.discriminator % 5;
+            userAvatar.src = `https://cdn.discordapp.com/embed/avatars/${defaultAvatarNumber}.png`;
+        }
+        
+        usernameSpan.textContent = user.username;
+        authButtons.classList.add('hidden');
+        userProfile.classList.remove('hidden');
     }
 });
