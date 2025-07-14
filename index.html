@@ -9,27 +9,26 @@
 </head>
 <body>
     <div class="container">
-        <div id="user-profile" class="user-profile hidden">
-            <img id="user-avatar" src="" alt="User Avatar" class="avatar">
-            <span id="username" class="username"></span>
-        </div>
-        
         <h1 class="title">Custom Moveset Maker V2</h1>
         
-        <div id="auth-buttons" class="buttons-container">
+        <div class="buttons-container" id="buttons-container">
             <button class="btn start-btn">
                 Start!!<br>
                 <span class="subtext">without Sign in</span>
             </button>
-            
-            <button id="discord-btn" class="btn discord-btn">
+            <button class="btn discord-btn" id="discord-login">
                 <i class="fab fa-discord"></i> Sign In With Discord
             </button>
         </div>
         
+        <div class="user-profile" id="user-profile">
+            <img id="user-pfp" src="" alt="User Profile Picture" class="user-pfp">
+            <p id="user-username"></p>
+        </div>
+        
         <div class="dropdown">
-            <button class="dropdown-btn">Check Updates</button>
-            <div class="dropdown-content">
+            <button class="dropdown-btn" id="dropdown-btn">Check Updates</button>
+            <div class="dropdown-content" id="dropdown-content">
                 <p>Nothing heh</p>
             </div>
         </div>
