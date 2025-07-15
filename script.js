@@ -14,7 +14,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const userAvatar = document.getElementById('user-avatar');
     const usernameSpan = document.getElementById('username');
     const startBtn = document.querySelector('.start-btn');
-    const loggedInStartBtn = document.createElement('button');
+    if (!startBtn) {
+        console.error("Start button not found in the DOM");
+    }
     
     const skipMovesBtn = document.getElementById('skip-moves-btn');
     const skipAnimBtn = document.getElementById('skip-anim-btn');
@@ -22,43 +24,26 @@ document.addEventListener('DOMContentLoaded', function() {
     const copyScriptBtn = document.getElementById('copy-script');
     const downloadScriptBtn = document.getElementById('download-script');
 
-    // Main dropdown elements
-    const mainDropdownBtn = document.querySelector('.dropdown-btn');
-    const mainDropdownContent = document.querySelector('.dropdown-content');
-
     // Discord OAuth URL
     const discordAuthUrl = 'https://discord.com/oauth2/authorize?client_id=1206450272428236810&redirect_uri=' + 
                          encodeURIComponent('https://custommovesetmakerv20.netlify.app/auth.html') + 
                          '&response_type=token&scope=identify';
     
-    // Initialize dropdown functionality
-    function setupDropdown() {
-        mainDropdownBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            mainDropdownContent.classList.toggle('active');
-            
-            if (sessionStorage.getItem('discord_token')) {
-                this.textContent = mainDropdownContent.classList.contains('active') 
-                    ? 'Hide Updates' 
-                    : 'Updates';
-            } else {
-                this.textContent = mainDropdownContent.classList.contains('active') 
-                    ? 'Hide Information' 
-                    : 'IMPORTANT: CLICK HERE';
-            }
-        });
+    // Setup main dropdown
+    function setupMainDropdown() {
+        const dropdownBtn = document.querySelector('.dropdown .dropdown-btn');
+        const dropdownContent = document.querySelector('.dropdown .dropdown-content');
 
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(e) {
-            if (!mainDropdownBtn.contains(e.target) {
-                mainDropdownContent.classList.remove('active');
-                if (sessionStorage.getItem('discord_token')) {
-                    mainDropdownBtn.textContent = 'Updates';
-                } else {
-                    mainDropdownBtn.textContent = 'IMPORTANT: CLICK HERE';
-                }
-            }
-        });
+        if (dropdownBtn && dropdownContent) {
+            dropdownBtn.addEventListener('click', function() {
+                dropdownContent.classList.toggle('active');
+                this.textContent = dropdownContent.classList.contains('active')
+                    ? 'Hide'
+                    : dropdownBtn.textContent === 'IMPORTANT: CLICK HERE' ? 'IMPORTANT: CLICK HERE' : 'Updates';
+            });
+        } else {
+            console.error("Dropdown button or content not found in the DOM");
+        }
     }
 
     // Check authentication status
@@ -81,66 +66,70 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Setup UI for logged-in users
     function setupLoggedInUI() {
-        // Create and setup logged in start button
-        loggedInStartBtn.className = 'btn start-btn';
-        loggedInStartBtn.innerHTML = "Let's Start!";
-        loggedInStartBtn.addEventListener('click', function() {
-            initialInterface.classList.add('hidden');
-            moveNamesInterface.classList.remove('hidden');
-            setupMoveNamesInterface();
-        });
-
-        // Replace the original start button
-        startBtn.replaceWith(loggedInStartBtn);
+        if (startBtn) {
+            startBtn.innerHTML = "Let's Start!";
+            startBtn.style.display = 'flex';
+        }
         discordBtn.style.display = 'none';
         
-        // Change dropdown content
-        mainDropdownContent.innerHTML = `
-            <p>Updates: Custom Moveset Maker New Ui And Fixed All Shits Bug</p>
-        `;
-        
-        // Show user profile
-        authButtons.classList.add('hidden');
-        userProfile.classList.remove('hidden');
+        // Change dropdown
+        const dropdownBtn = document.querySelector('.dropdown-btn');
+        const dropdownContent = document.querySelector('.dropdown-content');
+        if (dropdownBtn && dropdownContent) {
+            dropdownBtn.textContent = 'Updates';
+            dropdownContent.innerHTML = `
+                <p>Updates: Custom Moveset Maker New Ui And Fixed All Shits Bug</p>
+            `;
+        }
     }
     
     // Setup UI for logged-out users
     function setupLoggedOutUI() {
-        // Reset dropdown content
-        mainDropdownContent.innerHTML = `
-            <h3>Q - Why U Need Our Discord Account to Sign up?</h3>
-            <p>= To make sure I are keep connect With Us Always..</p>
-            
-            <ul class="security-list">
-                <li>We DO NOT IP LOG OR ANYTHING</li>
-                <li>We Just Get Your Username To Keep u Connect with us</li>
-            </ul>
-            
-            <h3>= Why We need to do it?</h3>
-            <p>- So u can Get In events and Updates!</p>
-            
-            <div class="signup-cta">
-                <p>== SO Sign Up NOW..</p>
-                <p>- If u are still worried about That it's some Ip log Website so Check Out this -</p>
-                <a href="#" class="safety-link">Website Safety Information</a>
-            </div>
-        `;
-        
-        // Hide user profile
-        authButtons.classList.remove('hidden');
-        userProfile.classList.add('hidden');
+        if (startBtn) {
+            startBtn.innerHTML = 'Start!!<br><span class="subtext">without Sign in</span>';
+            startBtn.style.display = 'flex';
+        }
         discordBtn.style.display = 'flex';
+        
+        // Reset dropdown
+        const dropdownBtn = document.querySelector('.dropdown-btn');
+        const dropdownContent = document.querySelector('.dropdown-content');
+        if (dropdownBtn && dropdownContent) {
+            dropdownBtn.textContent = 'IMPORTANT: CLICK HERE';
+            dropdownContent.innerHTML = `
+                <h3>Q - Why U Need Our Discord Account to Sign up?</h3>
+                <p>= To make sure I are keep connect With Us Always..</p>
+                
+                <ul class="security-list">
+                    <li>We DO NOT IP LOG OR ANYTHING</li>
+                    <li>We Just Get Your Username To Keep u Connect with us</li>
+                </ul>
+                
+                <h3>= Why We need to do it?</h3>
+                <p>- So u can Get In events and Updates!</p>
+                
+                <div class="signup-cta">
+                    <p>== SO Sign Up NOW..</p>
+                    <p>- If u are still worried about That it's some Ip log Website so Check Out this -</p>
+                    <a href="#" class="safety-link">Website Safety Information</a>
+                </div>
+            `;
+        }
     }
     
-    // Initial setup
-    setupDropdown();
+    // Initial auth check
     checkAuthStatus();
+    setupMainDropdown();
     
-    // Start button click handler (for logged out users)
+    // Start button click handler
     startBtn.addEventListener('click', function() {
-        initialInterface.classList.add('hidden');
-        moveNamesInterface.classList.remove('hidden');
-        setupMoveNamesInterface();
+        if (sessionStorage.getItem('discord_token')) {
+            alert("Coming soon for logged-in users!");
+        } else {
+            initialInterface.classList.add('hidden');
+            moveNamesInterface.classList.remove('hidden');
+            setupMoveNamesInterface();
+        }
     });
     
     // Discord button click handler
@@ -166,6 +155,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         skipMovesBtn.addEventListener('click', function() {
+            const move1 = document.getElementById('move1').value;
+            const move2 = document.getElementById('move2').value;
+            const move3 = document.getElementById('move3').value;
+            const move4 = document.getElementById('move4').value;
+            const ultimate = document.getElementById('ultimate').value;
+            
             if (skipMovesBtn.textContent === 'Done') {
                 // All fields filled - proceed to animation editor
                 moveNamesInterface.classList.add('hidden');
@@ -246,24 +241,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const dropdownBtns = document.querySelectorAll('.animation-dropdown .dropdown-btn');
         
         dropdownBtns.forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.stopPropagation();
+            btn.addEventListener('click', function() {
                 const content = this.nextElementSibling;
                 content.classList.toggle('active');
                 
                 this.textContent = content.classList.contains('active') 
                     ? 'Hide options' 
                     : 'More things..';
-            });
-        });
-
-        // Close dropdowns when clicking outside
-        document.addEventListener('click', function() {
-            document.querySelectorAll('.animation-dropdown .dropdown-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            document.querySelectorAll('.animation-dropdown .dropdown-btn').forEach(btn => {
-                btn.textContent = 'More things..';
             });
         });
     }
@@ -273,7 +257,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.addEventListener('input', function(e) {
             if (e.target.classList.contains('original-anim') || e.target.classList.contains('replacement-anim')) {
                 const group = e.target.closest('.animation-group');
-                const original = group.querySelector('.original-anim').value;
+                const original = group.querySelector('.original-anim'). value;
                 const replacement = group.querySelector('.replacement-anim').value;
                 
                 // Update group border based on validation
