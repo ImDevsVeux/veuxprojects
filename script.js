@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const copyScriptBtn = document.getElementById('copy-script');
     const downloadScriptBtn = document.getElementById('download-script');
-    
+
     // Discord OAuth URL
     const discordAuthUrl = 'https://discord.com/oauth2/authorize?client_id=1206450272428236810&redirect_uri=' + 
                          encodeURIComponent('https://custommovesetmakerv20.netlify.app/auth.html') + 
@@ -93,12 +93,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Start button click handler
     startBtn.addEventListener('click', function() {
         if (sessionStorage.getItem('discord_token')) {
-            // For logged-in users (coming soon)
             alert("Coming soon for logged-in users!");
         } else {
-            // For unauthenticated users
             initialInterface.classList.add('hidden');
             moveNamesInterface.classList.remove('hidden');
+            setupMoveNamesInterface();
         }
     });
     
@@ -107,75 +106,104 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.href = discordAuthUrl;
     });
     
-    // Skip Moves button handler
-    skipMovesBtn.addEventListener('click', function() {
-        const move1 = document.getElementById('move1').value;
-        const move2 = document.getElementById('move2').value;
-        const move3 = document.getElementById('move3').value;
-        const move4 = document.getElementById('move4').value;
-        const ultimate = document.getElementById('ultimate').value;
+    // Setup move names interface
+    function setupMoveNamesInterface() {
+        const moveInputs = document.querySelectorAll('#move-names-interface input');
         
-        // Check if all fields are filled to change button text
-        if (move1 && move2 && move3 && move4 && ultimate) {
-            skipMovesBtn.textContent = 'Done';
-            skipMovesBtn.style.backgroundColor = '#2ecc71';
-        } else {
-            // Proceed to next interface
-            moveNamesInterface.classList.add('hidden');
-            animationEditorInterface.classList.remove('hidden');
-            setupAnimationDropdowns();
-        }
-    });
-    
-    // Skip Animations button handler
-    skipAnimBtn.addEventListener('click', function() {
-        const allFilled = validateAnimationInputs();
+        moveInputs.forEach(input => {
+            input.addEventListener('input', function() {
+                const allFilled = Array.from(moveInputs).every(input => input.value.trim() !== '');
+                if (allFilled) {
+                    skipMovesBtn.textContent = 'Done';
+                    skipMovesBtn.style.backgroundColor = '#2ecc71';
+                } else {
+                    skipMovesBtn.textContent = 'Skip It';
+                    skipMovesBtn.style.backgroundColor = '#f39c12';
+                }
+            });
+        });
         
-        if (allFilled) {
-            skipAnimBtn.textContent = 'Done';
-            skipAnimBtn.style.backgroundColor = '#2ecc71';
-        } else {
-            // Check if any animation is partially filled
-            const hasPartial = checkPartialAnimationInputs();
+        skipMovesBtn.addEventListener('click', function() {
+            const move1 = document.getElementById('move1').value;
+            const move2 = document.getElementById('move2').value;
+            const move3 = document.getElementById('move3').value;
+            const move4 = document.getElementById('move4').value;
+            const ultimate = document.getElementById('ultimate').value;
             
-            if (hasPartial) {
-                alert("You can't skip because you didn't fill up all required fields for some animations. Please fill both original and replacement IDs or leave them both empty.");
-                return;
+            if (skipMovesBtn.textContent === 'Done') {
+                // All fields filled - proceed to animation editor
+                moveNamesInterface.classList.add('hidden');
+                animationEditorInterface.classList.remove('hidden');
+                setupAnimationEditorInterface();
+            } else {
+                // Some fields empty - proceed with default values
+                moveNamesInterface.classList.add('hidden');
+                animationEditorInterface.classList.remove('hidden');
+                setupAnimationEditorInterface();
             }
-            
-            // Proceed to generate script
-            animationEditorInterface.classList.add('hidden');
-            generateScript();
+        });
+    }
+    
+    // Setup animation editor interface
+    function setupAnimationEditorInterface() {
+        // Create all 5 animation groups
+        const animationContainer = document.querySelector('.animation-inputs');
+        animationContainer.innerHTML = '';
+        
+        for (let i = 1; i <= 5; i++) {
+            const animationGroup = document.createElement('div');
+            animationGroup.className = 'animation-group';
+            animationGroup.innerHTML = `
+                <h3>Animation ${i}</h3>
+                <div class="input-group">
+                    <label>Original Animation ID</label>
+                    <input type="text" class="original-anim" placeholder="Enter original animation ID">
+                </div>
+                <div class="input-group">
+                    <label>Replacement Animation ID</label>
+                    <input type="text" class="replacement-anim" placeholder="Enter replacement animation ID">
+                </div>
+                <div class="animation-dropdown">
+                    <button class="dropdown-btn small">More things..</button>
+                    <div class="dropdown-content small">
+                        <div class="input-group">
+                            <label>Animation Speed</label>
+                            <input type="number" class="anim-speed" placeholder="1.0" step="0.1" min="0.1" value="1.0">
+                        </div>
+                    </div>
+                </div>
+            `;
+            animationContainer.appendChild(animationGroup);
         }
-    });
-    
-    // Copy script button
-    copyScriptBtn.addEventListener('click', function() {
-        scriptOutput.select();
-        document.execCommand('copy');
         
-        // Show copied feedback
-        const originalText = copyScriptBtn.innerHTML;
-        copyScriptBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
-        setTimeout(() => {
-            copyScriptBtn.innerHTML = originalText;
-        }, 2000);
-    });
-    
-    // Download script button
-    downloadScriptBtn.addEventListener('click', function() {
-        const script = scriptOutput.value;
-        const blob = new Blob([script], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
+        // Setup dropdowns
+        setupAnimationDropdowns();
         
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'custom_moveset_script.lua';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    });
+        // Setup input validation
+        setupAnimationInputValidation();
+        
+        // Setup skip/done button
+        skipAnimBtn.textContent = 'Skip It';
+        skipAnimBtn.style.backgroundColor = '#f39c12';
+        
+        skipAnimBtn.addEventListener('click', function() {
+            if (skipAnimBtn.textContent === 'Done') {
+                // All required fields filled - generate script
+                animationEditorInterface.classList.add('hidden');
+                generateScript();
+            } else {
+                // Check for partial inputs
+                if (checkPartialAnimationInputs()) {
+                    alert("You can't skip because you have partially filled animation fields. Please fill both original and replacement IDs or leave them both empty.");
+                    return;
+                }
+                
+                // No partial inputs - generate script with empty animations
+                animationEditorInterface.classList.add('hidden');
+                generateScript();
+            }
+        });
+    }
     
     // Setup animation dropdowns
     function setupAnimationDropdowns() {
@@ -193,21 +221,48 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // Setup animation input validation
+    function setupAnimationInputValidation() {
+        document.addEventListener('input', function(e) {
+            if (e.target.classList.contains('original-anim') || e.target.classList.contains('replacement-anim')) {
+                const group = e.target.closest('.animation-group');
+                const original = group.querySelector('.original-anim').value;
+                const replacement = group.querySelector('.replacement-anim').value;
+                
+                // Update group border based on validation
+                if ((original && !replacement) || (!original && replacement)) {
+                    group.style.border = '1px solid #e74c3c';
+                } else {
+                    group.style.border = '1px solid rgba(76, 175, 80, 0.2)';
+                }
+                
+                // Update skip/done button
+                const allValid = validateAnimationInputs();
+                if (allValid) {
+                    skipAnimBtn.textContent = 'Done';
+                    skipAnimBtn.style.backgroundColor = '#2ecc71';
+                } else {
+                    skipAnimBtn.textContent = 'Skip It';
+                    skipAnimBtn.style.backgroundColor = '#f39c12';
+                }
+            }
+        });
+    }
+    
     // Validate animation inputs
     function validateAnimationInputs() {
         const animGroups = document.querySelectorAll('.animation-group');
-        let allFilled = true;
         
-        animGroups.forEach(group => {
+        for (let group of animGroups) {
             const original = group.querySelector('.original-anim').value;
             const replacement = group.querySelector('.replacement-anim').value;
             
             if ((original && !replacement) || (!original && replacement)) {
-                allFilled = false;
+                return false;
             }
-        });
+        }
         
-        return allFilled;
+        return true;
     }
     
     // Check for partially filled animation inputs
@@ -340,11 +395,11 @@ local function onAnimationPlayed(animationTrack)`;
         local startTime = 0
         Anim:Play()
         Anim:AdjustSpeed(${anim.speed})
-        Anim.TimePosition = startTime`;
+        Anim.TimePosition = startTime
+    end`;
                 });
 
                 luaScript += `
-    end
 end
 
 humanoid.AnimationPlayed:Connect(onAnimationPlayed)`;
@@ -354,8 +409,36 @@ humanoid.AnimationPlayed:Connect(onAnimationPlayed)`;
             scriptOutput.value = luaScript;
             generatingMessage.classList.add('hidden');
             scriptOutputContainer.classList.remove('hidden');
-        }, 1500); // Simulate generation delay
+        }, 1500);
     }
+    
+    // Copy script button
+    copyScriptBtn.addEventListener('click', function() {
+        scriptOutput.select();
+        document.execCommand('copy');
+        
+        // Show copied feedback
+        const originalText = copyScriptBtn.innerHTML;
+        copyScriptBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+        setTimeout(() => {
+            copyScriptBtn.innerHTML = originalText;
+        }, 2000);
+    });
+    
+    // Download script button
+    downloadScriptBtn.addEventListener('click', function() {
+        const script = scriptOutput.value;
+        const blob = new Blob([script], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'custom_moveset_script.lua';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    });
     
     // Fetch Discord user data
     async function fetchDiscordUser(token) {
@@ -389,48 +472,4 @@ humanoid.AnimationPlayed:Connect(onAnimationPlayed)`;
         authButtons.classList.add('hidden');
         userProfile.classList.remove('hidden');
     }
-    
-    // Input validation for move names
-    const moveInputs = document.querySelectorAll('#move-names-interface input');
-    moveInputs.forEach(input => {
-        input.addEventListener('input', function() {
-            const allFilled = Array.from(moveInputs).every(input => input.value.trim() !== '');
-            if (allFilled) {
-                skipMovesBtn.textContent = 'Done';
-                skipMovesBtn.style.backgroundColor = '#2ecc71';
-            } else {
-                skipMovesBtn.textContent = 'Skip It';
-                skipMovesBtn.style.backgroundColor = '#f39c12';
-            }
-        });
-    });
-    
-    // Input validation for animation inputs
-    document.addEventListener('input', function(e) {
-        if (e.target.classList.contains('original-anim') || e.target.classList.contains('replacement-anim')) {
-            const group = e.target.closest('.animation-group');
-            const original = group.querySelector('.original-anim').value;
-            const replacement = group.querySelector('.replacement-anim').value;
-            
-            if (original && replacement) {
-                // Both filled - valid
-            } else if (original || replacement) {
-                // Only one filled - show warning
-                group.style.border = '1px solid #e74c3c';
-            } else {
-                // Both empty - valid
-                group.style.border = '1px solid rgba(76, 175, 80, 0.2)';
-            }
-            
-            // Check all groups
-            const allFilled = validateAnimationInputs();
-            if (allFilled) {
-                skipAnimBtn.textContent = 'Done';
-                skipAnimBtn.style.backgroundColor = '#2ecc71';
-            } else {
-                skipAnimBtn.textContent = 'Skip It';
-                skipAnimBtn.style.backgroundColor = '#f39c12';
-            }
-        }
-    });
 });
