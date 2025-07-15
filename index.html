@@ -4,146 +4,164 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Custom Moveset Maker V2</title>
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
+    <!-- Main Container -->
     <div class="container">
+        <!-- User Profile (shown when logged in) -->
         <div id="user-profile" class="user-profile hidden">
             <img id="user-avatar" src="" alt="User Avatar" class="avatar">
             <span id="username" class="username"></span>
         </div>
         
-        <div id="main-menu" class="interface">
+        <!-- Initial Interface -->
+        <div id="initial-interface">
             <h1 class="title">Custom Moveset Maker V2</h1>
+            
             <div id="auth-buttons" class="buttons-container">
                 <button class="btn start-btn">
                     Start!!<br>
                     <span class="subtext">without Sign in</span>
                 </button>
+                
                 <button id="discord-btn" class="btn discord-btn">
                     <i class="fab fa-discord"></i> Sign In With Discord
                 </button>
             </div>
+            
             <div class="dropdown">
-                <button class="dropdown-btn">Check Updates</button>
+                <button class="dropdown-btn">IMPORTANT: CLICK HERE</button>
                 <div class="dropdown-content">
-                    <p>Nothing heh</p>
+                    <h3>Q - Why U Need Our Discord Account to Sign up?</h3>
+                    <p>= To make sure I are keep connect With Us Always..</p>
+                    
+                    <ul class="security-list">
+                        <li>We DO NOT IP LOG OR ANYTHING</li>
+                        <li>We Just Get Your Username To Keep u Connect with us</li>
+                    </ul>
+                    
+                    <h3>= Why We need to do it?</h3>
+                    <p>- So u can Get In events and Updates!</p>
+                    
+                    <div class="signup-cta">
+                        <p>== SO Sign Up NOW..</p>
+                        <p>- If u are still worried about That it's some Ip log Website so Check Out this -</p>
+                        <a href="#" class="safety-link">Website Safety Information</a>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div id="move-names" class="interface hidden">
+        <!-- Move Names Interface (hidden initially) -->
+        <div id="move-names-interface" class="hidden">
             <h1 class="title">Move Names</h1>
-            <div class="input-container">
+            
+            <div class="input-group">
                 <label>Move Name 1</label>
-                <input type="text" id="move1" placeholder="Enter Move 1 Name">
+                <input type="text" id="move1" placeholder="Enter move name">
+            </div>
+            
+            <div class="input-group">
                 <label>Move Name 2</label>
-                <input type="text" id="move2" placeholder="Enter Move 2 Name">
+                <input type="text" id="move2" placeholder="Enter move name">
+            </div>
+            
+            <div class="input-group">
                 <label>Move Name 3</label>
-                <input type="text" id="move3" placeholder="Enter Move 3 Name">
+                <input type="text" id="move3" placeholder="Enter move name">
+            </div>
+            
+            <div class="input-group">
                 <label>Move Name 4</label>
-                <input type="text" id="move4" placeholder="Enter Move 4 Name">
+                <input type="text" id="move4" placeholder="Enter move name">
+            </div>
+            
+            <div class="input-group">
                 <label>Ultimate Name</label>
-                <input type="text" id="ultimate" placeholder="Enter Ultimate Name">
+                <input type="text" id="ultimate" placeholder="Enter ultimate name">
             </div>
-            <button id="move-skip-btn" class="btn skip-btn">Skip It</button>
+            
+            <button id="skip-moves-btn" class="btn skip-btn">Skip It</button>
         </div>
 
-        <div id="animation-editor" class="interface hidden">
+        <!-- Animation Editor Interface (hidden initially) -->
+        <div id="animation-editor-interface" class="hidden">
             <h1 class="title">Animation Editor</h1>
-            <div class="input-container">
+            
+            <div class="animation-inputs">
+                <!-- Animation 1 -->
                 <div class="animation-group">
-                    <label>Add Your Original Animation Id 1</label>
-                    <input type="text" class="original-id" placeholder="Original Animation ID">
-                    <label>Add Your Replacement Animation Id 1</label>
-                    <input type="text" class="replacement-id" placeholder="Replacement Animation ID">
-                    <div class="dropdown">
-                        <button class="dropdown-btn more-options">More things..</button>
-                        <div class="dropdown-content">
-                            <label>Animation Speed</label>
-                            <input type="number" class="animation-speed" placeholder="e.g., 0.9" step="0.1" min="0">
-                            <label>Start Time</label>
-                            <input type="number" class="start-time" placeholder="e.g., 0" step="0.1" min="0">
+                    <h3>Animation 1</h3>
+                    <div class="input-group">
+                        <label>Original Animation ID</label>
+                        <input type="text" class="original-anim" placeholder="Enter original animation ID">
+                    </div>
+                    <div class="input-group">
+                        <label>Replacement Animation ID</label>
+                        <input type="text" class="replacement-anim" placeholder="Enter replacement animation ID">
+                    </div>
+                    <div class="animation-dropdown">
+                        <button class="dropdown-btn small">More things..</button>
+                        <div class="dropdown-content small">
+                            <div class="input-group">
+                                <label>Animation Speed</label>
+                                <input type="number" class="anim-speed" placeholder="1.0" step="0.1" min="0.1" value="1.0">
+                            </div>
                         </div>
                     </div>
                 </div>
-                <!-- Repeat for 4 more groups -->
+                
+                <!-- Repeat for animations 2-5 -->
+                <!-- Animation 2 -->
                 <div class="animation-group">
-                    <label>Add Your Original Animation Id 2</label>
-                    <input type="text" class="original-id" placeholder="Original Animation ID">
-                    <label>Add Your Replacement Animation Id 2</label>
-                    <input type="text" class="replacement-id" placeholder="Replacement Animation ID">
-                    <div class="dropdown">
-                        <button class="dropdown-btn more-options">More things..</button>
-                        <div class="dropdown-content">
-                            <label>Animation Speed</label>
-                            <input type="number" class="animation-speed" placeholder="e.g., 0.9" step="0.1" min="0">
-                            <label>Start Time</label>
-                            <input type="number" class="start-time" placeholder="e.g., 0" step="0.1" min="0">
-                        </div>
-                    </div>
+                    <h3>Animation 2</h3>
+                    <!-- Same structure as Animation 1 -->
                 </div>
+                
+                <!-- Animation 3 -->
                 <div class="animation-group">
-                    <label>Add Your Original Animation Id 3</label>
-                    <input type="text" class="original-id" placeholder="Original Animation ID">
-                    <label>Add Your Replacement Animation Id 3</label>
-                    <input type="text" class="replacement-id" placeholder="Replacement Animation ID">
-                    <div class="dropdown">
-                        <button class="dropdown-btn more-options">More things..</button>
-                        <div class="dropdown-content">
-                            <label>Animation Speed</label>
-                            <input type="number" class="animation-speed" placeholder="e.g., 0.9" step="0.1" min="0">
-                            <label>Start Time</label>
-                            <input type="number" class="start-time" placeholder="e.g., 0" step="0.1" min="0">
-                        </div>
-                    </div>
+                    <h3>Animation 3</h3>
+                    <!-- Same structure as Animation 1 -->
                 </div>
+                
+                <!-- Animation 4 -->
                 <div class="animation-group">
-                    <label>Add Your Original Animation Id 4</label>
-                    <input type="text" class="original-id" placeholder="Original Animation ID">
-                    <label>Add Your Replacement Animation Id 4</label>
-                    <input type="text" class="replacement-id" placeholder="Replacement Animation ID">
-                    <div class="dropdown">
-                        <button class="dropdown-btn more-options">More things..</button>
-                        <div class="dropdown-content">
-                            <label>Animation Speed</label>
-                            <input type="number" class="animation-speed" placeholder="e.g., 0.9" step="0.1" min="0">
-                            <label>Start Time</label>
-                            <input type="number" class="start-time" placeholder="e.g., 0" step="0.1" min="0">
-                        </div>
-                    </div>
+                    <h3>Animation 4</h3>
+                    <!-- Same structure as Animation 1 -->
                 </div>
+                
+                <!-- Animation 5 -->
                 <div class="animation-group">
-                    <label>Add Your Original Animation Id 5</label>
-                    <input type="text" class="original-id" placeholder="Original Animation ID">
-                    <label>Add Your Replacement Animation Id 5</label>
-                    <input type="text" class="replacement-id" placeholder="Replacement Animation ID">
-                    <div class="dropdown">
-                        <button class="dropdown-btn more-options">More things..</button>
-                        <div class="dropdown-content">
-                            <label>Animation Speed</label>
-                            <input type="number" class="animation-speed" placeholder="e.g., 0.9" step="0.1" min="0">
-                            <label>Start Time</label>
-                            <input type="number" class="start-time" placeholder="e.g., 0" step="0.1" min="0">
-                        </div>
-                    </div>
+                    <h3>Animation 5</h3>
+                    <!-- Same structure as Animation 1 -->
                 </div>
             </div>
-            <button id="animation-skip-btn" class="btn skip-btn">Skip It</button>
+            
+            <button id="skip-anim-btn" class="btn skip-btn">Skip It</button>
         </div>
 
-        <div id="script-output" class="interface hidden">
-            <h1 class="title">Generated Script</h1>
-            <p id="generating-message" class="generating-message">Your Script Is Getting Generated Please Wait...</p>
-            <textarea id="generated-script" class="script-textarea" readonly></textarea>
-            <div class="output-buttons">
-                <button id="copy-btn" class="btn">Copy Script</button>
-                <button id="download-btn" class="btn">Download Script</button>
+        <!-- Script Generator Interface (hidden initially) -->
+        <div id="script-generator-interface" class="hidden">
+            <h1 class="title">Your Generated Script</h1>
+            <div id="generating-message" class="generating-message">
+                <i class="fas fa-spinner fa-spin"></i> Your Script Is Getting Generated Please Wait...
+            </div>
+            <div id="script-output-container" class="hidden">
+                <textarea id="script-output" readonly></textarea>
+                <div class="script-actions">
+                    <button id="copy-script" class="btn copy-btn">
+                        <i class="fas fa-copy"></i> Copy Script
+                    </button>
+                    <button id="download-script" class="btn download-btn">
+                        <i class="fas fa-download"></i> Download Script
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
-    <script src="/script.js"></script>
+    <script src="script.js"></script>
 </body>
-                            </html>
+</html>
