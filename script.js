@@ -511,5 +511,8 @@ humanoid.AnimationPlayed:Connect(onAnimationPlayed)`;
         usernameSpan.textContent = user.username;
         authButtons.classList.add('hidden');
         userProfile.classList.remove('hidden');
-        
+        setupLoggedInUI();
+    }
+});
+});
   
