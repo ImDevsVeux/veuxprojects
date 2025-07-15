@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const userAvatar = document.getElementById('user-avatar');
     const usernameSpan = document.getElementById('username');
     const startBtn = document.querySelector('.start-btn');
+    const loggedInStartBtn = document.createElement('button');
     
     const skipMovesBtn = document.getElementById('skip-moves-btn');
     const skipAnimBtn = document.getElementById('skip-anim-btn');
@@ -31,8 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
                          '&response_type=token&scope=identify';
     
     // Initialize dropdown functionality
-    function setupDropdowns() {
-        // Main dropdown
+    function setupDropdown() {
         mainDropdownBtn.addEventListener('click', function(e) {
             e.stopPropagation();
             mainDropdownContent.classList.toggle('active');
@@ -81,46 +81,32 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Setup UI for logged-in users
     function setupLoggedInUI() {
-        // Create "Let's Start!" button if it doesn't exist
-        if (!document.querySelector('.lets-start-btn')) {
-            const letsStartBtn = document.createElement('button');
-            letsStartBtn.className = 'btn start-btn lets-start-btn';
-            letsStartBtn.innerHTML = "Let's Start!";
-            letsStartBtn.addEventListener('click', function() {
-                initialInterface.classList.add('hidden');
-                moveNamesInterface.classList.remove('hidden');
-                setupMoveNamesInterface();
-            });
-            
-            // Replace old start button
-            startBtn.replaceWith(letsStartBtn);
-        }
+        // Create and setup logged in start button
+        loggedInStartBtn.className = 'btn start-btn';
+        loggedInStartBtn.innerHTML = "Let's Start!";
+        loggedInStartBtn.addEventListener('click', function() {
+            initialInterface.classList.add('hidden');
+            moveNamesInterface.classList.remove('hidden');
+            setupMoveNamesInterface();
+        });
 
-        // Update dropdown
-        mainDropdownBtn.textContent = 'Updates';
+        // Replace the original start button
+        startBtn.replaceWith(loggedInStartBtn);
+        discordBtn.style.display = 'none';
+        
+        // Change dropdown content
         mainDropdownContent.innerHTML = `
             <p>Updates: Custom Moveset Maker New Ui And Fixed All Shits Bug</p>
         `;
+        
+        // Show user profile
+        authButtons.classList.add('hidden');
+        userProfile.classList.remove('hidden');
     }
     
     // Setup UI for logged-out users
     function setupLoggedOutUI() {
-        // Reset start button
-        const existingStartBtn = document.querySelector('.lets-start-btn');
-        if (existingStartBtn) {
-            const originalStartBtn = document.createElement('button');
-            originalStartBtn.className = 'btn start-btn';
-            originalStartBtn.innerHTML = 'Start!!<br><span class="subtext">without Sign in</span>';
-            originalStartBtn.addEventListener('click', function() {
-                initialInterface.classList.add('hidden');
-                moveNamesInterface.classList.remove('hidden');
-                setupMoveNamesInterface();
-            });
-            existingStartBtn.replaceWith(originalStartBtn);
-        }
-
-        // Reset dropdown
-        mainDropdownBtn.textContent = 'IMPORTANT: CLICK HERE';
+        // Reset dropdown content
         mainDropdownContent.innerHTML = `
             <h3>Q - Why U Need Our Discord Account to Sign up?</h3>
             <p>= To make sure I are keep connect With Us Always..</p>
@@ -139,17 +125,29 @@ document.addEventListener('DOMContentLoaded', function() {
                 <a href="#" class="safety-link">Website Safety Information</a>
             </div>
         `;
+        
+        // Hide user profile
+        authButtons.classList.remove('hidden');
+        userProfile.classList.add('hidden');
+        discordBtn.style.display = 'flex';
     }
     
     // Initial setup
-    setupDropdowns();
+    setupDropdown();
     checkAuthStatus();
+    
+    // Start button click handler (for logged out users)
+    startBtn.addEventListener('click', function() {
+        initialInterface.classList.add('hidden');
+        moveNamesInterface.classList.remove('hidden');
+        setupMoveNamesInterface();
+    });
     
     // Discord button click handler
     discordBtn.addEventListener('click', function() {
         window.location.href = discordAuthUrl;
     });
-
+    
     // Setup move names interface
     function setupMoveNamesInterface() {
         const moveInputs = document.querySelectorAll('#move-names-interface input');
@@ -215,25 +213,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // Setup dropdowns
-        const animDropdownBtns = document.querySelectorAll('.animation-dropdown .dropdown-btn');
-        animDropdownBtns.forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const content = this.nextElementSibling;
-                content.classList.toggle('active');
-                this.textContent = content.classList.contains('active') ? 'Hide options' : 'More things..';
-            });
-        });
-        
-        // Close animation dropdowns when clicking outside
-        document.addEventListener('click', function() {
-            document.querySelectorAll('.animation-dropdown .dropdown-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            document.querySelectorAll('.animation-dropdown .dropdown-btn').forEach(btn => {
-                btn.textContent = 'More things..';
-            });
-        });
+        setupAnimationDropdowns();
         
         // Setup input validation
         setupAnimationInputValidation();
@@ -258,6 +238,33 @@ document.addEventListener('DOMContentLoaded', function() {
                 animationEditorInterface.classList.add('hidden');
                 generateScript();
             }
+        });
+    }
+    
+    // Setup animation dropdowns
+    function setupAnimationDropdowns() {
+        const dropdownBtns = document.querySelectorAll('.animation-dropdown .dropdown-btn');
+        
+        dropdownBtns.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const content = this.nextElementSibling;
+                content.classList.toggle('active');
+                
+                this.textContent = content.classList.contains('active') 
+                    ? 'Hide options' 
+                    : 'More things..';
+            });
+        });
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.animation-dropdown .dropdown-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.querySelectorAll('.animation-dropdown .dropdown-btn').forEach(btn => {
+                btn.textContent = 'More things..';
+            });
         });
     }
     
@@ -511,8 +518,5 @@ humanoid.AnimationPlayed:Connect(onAnimationPlayed)`;
         usernameSpan.textContent = user.username;
         authButtons.classList.add('hidden');
         userProfile.classList.remove('hidden');
-        setupLoggedInUI();
     }
 });
-});
-  
