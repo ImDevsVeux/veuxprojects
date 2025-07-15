@@ -14,27 +14,136 @@
             <span id="username" class="username"></span>
         </div>
         
-        <h1 class="title">Custom Moveset Maker V2</h1>
-        
-        <div id="auth-buttons" class="buttons-container">
-            <button class="btn start-btn">
-                Start!!<br>
-                <span class="subtext">without Sign in</span>
-            </button>
-            
-            <button id="discord-btn" class="btn discord-btn">
-                <i class="fab fa-discord"></i> Sign In With Discord
-            </button>
+        <div id="main-menu" class="interface">
+            <h1 class="title">Custom Moveset Maker V2</h1>
+            <div id="auth-buttons" class="buttons-container">
+                <button class="btn start-btn">
+                    Start!!<br>
+                    <span class="subtext">without Sign in</span>
+                </button>
+                <button id="discord-btn" class="btn discord-btn">
+                    <i class="fab fa-discord"></i> Sign In With Discord
+                </button>
+            </div>
+            <div class="dropdown">
+                <button class="dropdown-btn">Check Updates</button>
+                <div class="dropdown-content">
+                    <p>Nothing heh</p>
+                </div>
+            </div>
         </div>
-        
-        <div class="dropdown">
-            <button class="dropdown-btn">Check Updates</button>
-            <div class="dropdown-content">
-                <p>Nothing heh</p>
+
+        <div id="move-names" class="interface hidden">
+            <h1 class="title">Move Names</h1>
+            <div class="input-container">
+                <label>Move Name 1</label>
+                <input type="text" id="move1" placeholder="Enter Move 1 Name">
+                <label>Move Name 2</label>
+                <input type="text" id="move2" placeholder="Enter Move 2 Name">
+                <label>Move Name 3</label>
+                <input type="text" id="move3" placeholder="Enter Move 3 Name">
+                <label>Move Name 4</label>
+                <input type="text" id="move4" placeholder="Enter Move 4 Name">
+                <label>Ultimate Name</label>
+                <input type="text" id="ultimate" placeholder="Enter Ultimate Name">
+            </div>
+            <button id="move-skip-btn" class="btn skip-btn">Skip It</button>
+        </div>
+
+        <div id="animation-editor" class="interface hidden">
+            <h1 class="title">Animation Editor</h1>
+            <div class="input-container">
+                <div class="animation-group">
+                    <label>Add Your Original Animation Id 1</label>
+                    <input type="text" class="original-id" placeholder="Original Animation ID">
+                    <label>Add Your Replacement Animation Id 1</label>
+                    <input type="text" class="replacement-id" placeholder="Replacement Animation ID">
+                    <div class="dropdown">
+                        <button class="dropdown-btn more-options">More things..</button>
+                        <div class="dropdown-content">
+                            <label>Animation Speed</label>
+                            <input type="number" class="animation-speed" placeholder="e.g., 0.9" step="0.1" min="0">
+                            <label>Start Time</label>
+                            <input type="number" class="start-time" placeholder="e.g., 0" step="0.1" min="0">
+                        </div>
+                    </div>
+                </div>
+                <!-- Repeat for 4 more groups -->
+                <div class="animation-group">
+                    <label>Add Your Original Animation Id 2</label>
+                    <input type="text" class="original-id" placeholder="Original Animation ID">
+                    <label>Add Your Replacement Animation Id 2</label>
+                    <input type="text" class="replacement-id" placeholder="Replacement Animation ID">
+                    <div class="dropdown">
+                        <button class="dropdown-btn more-options">More things..</button>
+                        <div class="dropdown-content">
+                            <label>Animation Speed</label>
+                            <input type="number" class="animation-speed" placeholder="e.g., 0.9" step="0.1" min="0">
+                            <label>Start Time</label>
+                            <input type="number" class="start-time" placeholder="e.g., 0" step="0.1" min="0">
+                        </div>
+                    </div>
+                </div>
+                <div class="animation-group">
+                    <label>Add Your Original Animation Id 3</label>
+                    <input type="text" class="original-id" placeholder="Original Animation ID">
+                    <label>Add Your Replacement Animation Id 3</label>
+                    <input type="text" class="replacement-id" placeholder="Replacement Animation ID">
+                    <div class="dropdown">
+                        <button class="dropdown-btn more-options">More things..</button>
+                        <div class="dropdown-content">
+                            <label>Animation Speed</label>
+                            <input type="number" class="animation-speed" placeholder="e.g., 0.9" step="0.1" min="0">
+                            <label>Start Time</label>
+                            <input type="number" class="start-time" placeholder="e.g., 0" step="0.1" min="0">
+                        </div>
+                    </div>
+                </div>
+                <div class="animation-group">
+                    <label>Add Your Original Animation Id 4</label>
+                    <input type="text" class="original-id" placeholder="Original Animation ID">
+                    <label>Add Your Replacement Animation Id 4</label>
+                    <input type="text" class="replacement-id" placeholder="Replacement Animation ID">
+                    <div class="dropdown">
+                        <button class="dropdown-btn more-options">More things..</button>
+                        <div class="dropdown-content">
+                            <label>Animation Speed</label>
+                            <input type="number" class="animation-speed" placeholder="e.g., 0.9" step="0.1" min="0">
+                            <label>Start Time</label>
+                            <input type="number" class="start-time" placeholder="e.g., 0" step="0.1" min="0">
+                        </div>
+                    </div>
+                </div>
+                <div class="animation-group">
+                    <label>Add Your Original Animation Id 5</label>
+                    <input type="text" class="original-id" placeholder="Original Animation ID">
+                    <label>Add Your Replacement Animation Id 5</label>
+                    <input type="text" class="replacement-id" placeholder="Replacement Animation ID">
+                    <div class="dropdown">
+                        <button class="dropdown-btn more-options">More things..</button>
+                        <div class="dropdown-content">
+                            <label>Animation Speed</label>
+                            <input type="number" class="animation-speed" placeholder="e.g., 0.9" step="0.1" min="0">
+                            <label>Start Time</label>
+                            <input type="number" class="start-time" placeholder="e.g., 0" step="0.1" min="0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button id="animation-skip-btn" class="btn skip-btn">Skip It</button>
+        </div>
+
+        <div id="script-output" class="interface hidden">
+            <h1 class="title">Generated Script</h1>
+            <p id="generating-message" class="generating-message">Your Script Is Getting Generated Please Wait...</p>
+            <textarea id="generated-script" class="script-textarea" readonly></textarea>
+            <div class="output-buttons">
+                <button id="copy-btn" class="btn">Copy Script</button>
+                <button id="download-btn" class="btn">Download Script</button>
             </div>
         </div>
     </div>
 
     <script src="/script.js"></script>
 </body>
-</html>
+                            </html>
