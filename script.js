@@ -21,11 +21,46 @@ document.addEventListener('DOMContentLoaded', function() {
     const copyScriptBtn = document.getElementById('copy-script');
     const downloadScriptBtn = document.getElementById('download-script');
 
+    // Main dropdown elements
+    const mainDropdownBtn = document.querySelector('.dropdown-btn');
+    const mainDropdownContent = document.querySelector('.dropdown-content');
+
     // Discord OAuth URL
     const discordAuthUrl = 'https://discord.com/oauth2/authorize?client_id=1206450272428236810&redirect_uri=' + 
                          encodeURIComponent('https://custommovesetmakerv20.netlify.app/auth.html') + 
                          '&response_type=token&scope=identify';
     
+    // Initialize dropdown functionality
+    function setupDropdowns() {
+        // Main dropdown
+        mainDropdownBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            mainDropdownContent.classList.toggle('active');
+            
+            if (sessionStorage.getItem('discord_token')) {
+                this.textContent = mainDropdownContent.classList.contains('active') 
+                    ? 'Hide Updates' 
+                    : 'Updates';
+            } else {
+                this.textContent = mainDropdownContent.classList.contains('active') 
+                    ? 'Hide Information' 
+                    : 'IMPORTANT: CLICK HERE';
+            }
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!mainDropdownBtn.contains(e.target) {
+                mainDropdownContent.classList.remove('active');
+                if (sessionStorage.getItem('discord_token')) {
+                    mainDropdownBtn.textContent = 'Updates';
+                } else {
+                    mainDropdownBtn.textContent = 'IMPORTANT: CLICK HERE';
+                }
+            }
+        });
+    }
+
     // Check authentication status
     function checkAuthStatus() {
         const token = sessionStorage.getItem('discord_token');
@@ -46,28 +81,47 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Setup UI for logged-in users
     function setupLoggedInUI() {
-        startBtn.innerHTML = "Let's Start!";
-        discordBtn.style.display = 'none';
-        
-        // Change dropdown
-        const dropdownBtn = document.querySelector('.dropdown-btn');
-        const dropdownContent = document.querySelector('.dropdown-content');
-        dropdownBtn.textContent = 'Updates';
-        dropdownContent.innerHTML = `
+        // Create "Let's Start!" button if it doesn't exist
+        if (!document.querySelector('.lets-start-btn')) {
+            const letsStartBtn = document.createElement('button');
+            letsStartBtn.className = 'btn start-btn lets-start-btn';
+            letsStartBtn.innerHTML = "Let's Start!";
+            letsStartBtn.addEventListener('click', function() {
+                initialInterface.classList.add('hidden');
+                moveNamesInterface.classList.remove('hidden');
+                setupMoveNamesInterface();
+            });
+            
+            // Replace old start button
+            startBtn.replaceWith(letsStartBtn);
+        }
+
+        // Update dropdown
+        mainDropdownBtn.textContent = 'Updates';
+        mainDropdownContent.innerHTML = `
             <p>Updates: Custom Moveset Maker New Ui And Fixed All Shits Bug</p>
         `;
     }
     
     // Setup UI for logged-out users
     function setupLoggedOutUI() {
-        startBtn.innerHTML = 'Start!!<br><span class="subtext">without Sign in</span>';
-        discordBtn.style.display = 'flex';
-        
+        // Reset start button
+        const existingStartBtn = document.querySelector('.lets-start-btn');
+        if (existingStartBtn) {
+            const originalStartBtn = document.createElement('button');
+            originalStartBtn.className = 'btn start-btn';
+            originalStartBtn.innerHTML = 'Start!!<br><span class="subtext">without Sign in</span>';
+            originalStartBtn.addEventListener('click', function() {
+                initialInterface.classList.add('hidden');
+                moveNamesInterface.classList.remove('hidden');
+                setupMoveNamesInterface();
+            });
+            existingStartBtn.replaceWith(originalStartBtn);
+        }
+
         // Reset dropdown
-        const dropdownBtn = document.querySelector('.dropdown-btn');
-        const dropdownContent = document.querySelector('.dropdown-content');
-        dropdownBtn.textContent = 'IMPORTANT: CLICK HERE';
-        dropdownContent.innerHTML = `
+        mainDropdownBtn.textContent = 'IMPORTANT: CLICK HERE';
+        mainDropdownContent.innerHTML = `
             <h3>Q - Why U Need Our Discord Account to Sign up?</h3>
             <p>= To make sure I are keep connect With Us Always..</p>
             
@@ -87,25 +141,15 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
     }
     
-    // Initial auth check
+    // Initial setup
+    setupDropdowns();
     checkAuthStatus();
-    
-    // Start button click handler
-    startBtn.addEventListener('click', function() {
-        if (sessionStorage.getItem('discord_token')) {
-            alert("Coming soon for logged-in users!");
-        } else {
-            initialInterface.classList.add('hidden');
-            moveNamesInterface.classList.remove('hidden');
-            setupMoveNamesInterface();
-        }
-    });
     
     // Discord button click handler
     discordBtn.addEventListener('click', function() {
         window.location.href = discordAuthUrl;
     });
-    
+
     // Setup move names interface
     function setupMoveNamesInterface() {
         const moveInputs = document.querySelectorAll('#move-names-interface input');
@@ -124,12 +168,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         skipMovesBtn.addEventListener('click', function() {
-            const move1 = document.getElementById('move1').value;
-            const move2 = document.getElementById('move2').value;
-            const move3 = document.getElementById('move3').value;
-            const move4 = document.getElementById('move4').value;
-            const ultimate = document.getElementById('ultimate').value;
-            
             if (skipMovesBtn.textContent === 'Done') {
                 // All fields filled - proceed to animation editor
                 moveNamesInterface.classList.add('hidden');
@@ -177,7 +215,25 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // Setup dropdowns
-        setupAnimationDropdowns();
+        const animDropdownBtns = document.querySelectorAll('.animation-dropdown .dropdown-btn');
+        animDropdownBtns.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const content = this.nextElementSibling;
+                content.classList.toggle('active');
+                this.textContent = content.classList.contains('active') ? 'Hide options' : 'More things..';
+            });
+        });
+        
+        // Close animation dropdowns when clicking outside
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.animation-dropdown .dropdown-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.querySelectorAll('.animation-dropdown .dropdown-btn').forEach(btn => {
+                btn.textContent = 'More things..';
+            });
+        });
         
         // Setup input validation
         setupAnimationInputValidation();
@@ -202,22 +258,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 animationEditorInterface.classList.add('hidden');
                 generateScript();
             }
-        });
-    }
-    
-    // Setup animation dropdowns
-    function setupAnimationDropdowns() {
-        const dropdownBtns = document.querySelectorAll('.animation-dropdown .dropdown-btn');
-        
-        dropdownBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                const content = this.nextElementSibling;
-                content.classList.toggle('active');
-                
-                this.textContent = content.classList.contains('active') 
-                    ? 'Hide options' 
-                    : 'More things..';
-            });
         });
     }
     
@@ -471,5 +511,5 @@ humanoid.AnimationPlayed:Connect(onAnimationPlayed)`;
         usernameSpan.textContent = user.username;
         authButtons.classList.add('hidden');
         userProfile.classList.remove('hidden');
-    }
-});
+        
+  
