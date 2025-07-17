@@ -91,23 +91,27 @@
             <h1 class="title">Animation Editor</h1>
             
             <div class="animation-inputs">
-                <!-- Animation groups will be dynamically added via JavaScript -->
+                <!-- Animation groups will be added dynamically -->
             </div>
             
-            <button id="add-animation-btn" class="btn add-btn">Add More Animations</button>
-            <button id="skip-anim-btn" class="btn skip-btn">Skip It</button>
+            <div class="animation-actions">
+                <button id="add-anim-btn" class="btn add-btn">Add More Animations</button>
+                <button id="skip-anim-btn" class="btn skip-btn">Skip It</button>
+            </div>
         </div>
 
-        <!-- VFX Interface (hidden initially, for signed-in users) -->
-        <div id="vfxs-interface" class="hidden">
+        <!-- VFX Editor Interface (hidden initially) -->
+        <div id="vfx-interface" class="hidden">
             <h1 class="title">VFX Editor</h1>
             
             <div class="vfx-inputs">
-                <!-- VFX groups will be dynamically added via JavaScript -->
+                <!-- VFX groups will be added dynamically -->
             </div>
             
-            <button id="add-vfx-btn" class="btn add-btn">Add More VFX</button>
-            <button id="skip-vfx-btn" class="btn skip-btn">Skip It</button>
+            <div class="vfx-actions">
+                <button id="add-vfx-btn" class="btn add-btn">Add More VFX</button>
+                <button id="skip-vfx-btn" class="btn skip-btn">Skip It</button>
+            </div>
         </div>
 
         <!-- Script Generator Interface (hidden initially) -->
