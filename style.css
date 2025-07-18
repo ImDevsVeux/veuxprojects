@@ -31,6 +31,84 @@ body {
     display: none !important;
 }
 
+/* acsas.css.txt */
+/* Add these styles to the existing CSS */
+
+/* Animation Groups */
+.animation-group {
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(76, 175, 80, 0.2);
+    transition: border-color 0.3s;
+}
+
+.animation-group h3 {
+    color: #f39c12;
+    margin-bottom: 15px;
+}
+
+/* VFX Groups */
+.vfx-group {
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(76, 175, 80, 0.2);
+    transition: border-color 0.3s;
+}
+
+.vfx-group h3 {
+    color: #3498db;
+    margin-bottom: 15px;
+}
+
+/* Add Animation Button */
+.add-anim-btn {
+    display: block;
+    margin: 20px auto;
+    background-color: #3498db;
+    color: white;
+}
+
+/* Add VFX Button */
+#add-vfx-btn {
+    display: block;
+    margin: 20px auto;
+    background-color: #9b59b6;
+    color: white;
+}
+
+/* Input Validation */
+.animation-group.invalid,
+.vfx-group.invalid {
+    border: 1px solid #e74c3c;
+}
+
+/* Dropdown for VFX Moves */
+.vfx-move-select {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.vfx-move-select:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.3);
+}
+
+/* Animation Inputs Container */
+.animation-inputs {
+    margin-bottom: 20px;
+}
+
 /* User Profile */
 .user-profile {
     position: absolute;
