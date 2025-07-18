@@ -39,10 +39,10 @@ document.addEventListener('DOMContentLoaded', function() {
                          encodeURIComponent('https://custommovesetmakerv20.netlify.app/auth.html') + 
                          '&response_type=token&scope=identify';
 
-    // AI Configuration
+    // AI Configuration - Using environment variable from GitHub Secrets
     const AI_API_URL = "https://router.huggingface.co/v1/chat/completions";
     const AI_MODEL = "meta-llama/Llama-3.1-8B-Instruct:fireworks-ai";
-    const HF_TOKEN = "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";
+    const HF_TOKEN = process.env.HF_TOKEN || ""; // Will be injected via GitHub Secrets
     let messageCount = 0;
     const MAX_MESSAGES_GUEST = 15;
 
@@ -237,6 +237,10 @@ document.addEventListener('DOMContentLoaded', function() {
         chatMessages.scrollTop = chatMessages.scrollHeight;
         
         try {
+            if (!HF_TOKEN) {
+                throw new Error('API key not configured');
+            }
+            
             // Call AI API
             const response = await fetch(AI_API_URL, {
                 method: 'POST',
