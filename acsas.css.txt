@@ -1,0 +1,315 @@
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #121212 0%, #003300 100%);
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    position: relative;
+    max-width: 800px;
+    width: 100%;
+    text-align: center;
+    padding: 40px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 255, 0, 0.2);
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* User Profile */
+.user-profile {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #4CAF50;
+}
+
+.username {
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
+/* Titles */
+.title {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    color: #4CAF50;
+    text-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+}
+
+/* Buttons */
+.btn {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px auto;
+}
+
+.start-btn {
+    background-color: #4CAF50;
+    color: white;
+    box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+    flex-direction: column;
+    display: flex !important; /* Ensure visibility */
+}
+
+.start-btn:hover {
+    background-color: #45a049;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(76, 175, 80, 0.6);
+}
+
+.start-btn .subtext {
+    font-size: 0.8rem;
+    opacity: 0.7;
+    margin-top: 5px;
+}
+
+.discord-btn {
+    background-color: #5865F2;
+    color: white;
+    box-shadow: 0 5px 15px rgba(88, 101, 242, 0.4);
+}
+
+.discord-btn:hover {
+    background-color: #4752C4;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(88, 101, 242, 0.6);
+}
+
+.discord-btn i {
+    margin-right: 10px;
+    font-size: 1.3rem;
+}
+
+.skip-btn {
+    background-color: #f39c12;
+    color: white;
+    margin-top: 30px;
+}
+
+.skip-btn:hover {
+    background-color: #e67e22;
+}
+
+.copy-btn {
+    background-color: #3498db;
+    color: white;
+}
+
+.download-btn {
+    background-color: #2ecc71;
+    color: white;
+}
+
+/* Ensure auth-buttons container stays visible */
+#auth-buttons {
+    display: flex !important;
+}
+
+/* Input Groups */
+.input-group {
+    margin: 15px 0;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.3);
+}
+
+/* Dropdowns */
+.dropdown {
+    margin-top: 20px;
+}
+
+.dropdown-btn {
+    background: transparent;
+    color: #4CAF50;
+    border: 1px solid #4CAF50;
+    padding: 10px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+}
+
+.dropdown-btn.small {
+    padding: 8px 15px;
+    font-size: 0.9rem;
+    margin: 10px 0;
+}
+
+.dropdown-btn:hover {
+    background-color: rgba(76, 175, 80, 0.1);
+}
+
+.dropdown-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease;
+    text-align: left;
+    margin-top: 15px;
+    padding: 0 20px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}
+
+.dropdown-content.small {
+    padding: 0 15px;
+}
+
+.dropdown-content.active {
+    max-height: 500px;
+    padding: 20px;
+}
+
+.dropdown-content.small.active {
+    padding: 15px;
+}
+
+/* Animation Groups */
+.animation-group {
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(76, 175, 80, 0.2);
+}
+
+.animation-group h3 {
+    color: #f39c12;
+    margin-bottom: 15px;
+}
+
+/* Script Output */
+#script-output {
+    width: 100%;
+    height: 300px;
+    padding: 15px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 1px solid #4CAF50;
+    border-radius: 8px;
+    color: white;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    resize: none;
+    margin-bottom: 20px;
+}
+
+.script-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.script-actions .btn {
+    margin: 0;
+}
+
+.generating-message {
+    font-size: 1.2rem;
+    color: #4CAF50;
+    margin: 30px 0;
+}
+
+.generating-message i {
+    margin-right: 10px;
+}
+
+.signup-message {
+    display: block;
+    margin-top: 10px;
+    font-size: 1.1rem;
+    color: #f39c12;
+    font-weight: bold;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+    
+    .title {
+        font-size: 2rem;
+    }
+    
+    .btn {
+        padding: 12px 25px;
+        font-size: 1rem;
+    }
+    
+    .user-profile {
+        position: static;
+        margin-bottom: 20px;
+    }
+    
+    .script-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .title {
+        font-size: 1.8rem;
+    }
+    
+    .buttons-container {
+        gap: 15px;
+    }
+}
