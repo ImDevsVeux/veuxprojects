@@ -8,15 +8,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <!-- Main Container -->
     <div class="container">
-        <!-- User Profile (shown when logged in) -->
         <div id="user-profile" class="user-profile hidden">
             <img id="user-avatar" src="" alt="User Avatar" class="avatar">
             <span id="username" class="username"></span>
         </div>
         
-        <!-- Initial Interface -->
         <div id="initial-interface">
             <h1 class="title">Custom Moveset Maker V2</h1>
             
@@ -54,7 +51,6 @@
             </div>
         </div>
 
-        <!-- Move Names Interface (hidden initially) -->
         <div id="move-names-interface" class="hidden">
             <h1 class="title">Move Names</h1>
             
@@ -86,140 +82,28 @@
             <button id="skip-moves-btn" class="btn skip-btn">Skip It</button>
         </div>
 
-        <!-- Animation Editor Interface (hidden initially) -->
         <div id="animation-editor-interface" class="hidden">
             <h1 class="title">Animation Editor</h1>
             
             <div class="animation-inputs">
-                <!-- Animation 1 -->
-                <div class="animation-group">
-                    <h3>Animation 1</h3>
-                    <div class="input-group">
-                        <label>Original Animation ID</label>
-                        <input type="text" class="original-anim" placeholder="Enter original animation ID">
-                    </div>
-                    <div class="input-group">
-                        <label>Replacement Animation ID</label>
-                        <input type="text" class="replacement-anim" placeholder="Enter replacement animation ID">
-                    </div>
-                    <div class="animation-dropdown">
-                        <button class="dropdown-btn small">More things..</button>
-                        <div class="dropdown-content small">
-                            <div class="input-group">
-                                <label>Animation Speed</label>
-                                <input type="number" class="anim-speed" placeholder="1.0" step="0.1" min="0.1" value="1.0">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Repeat for animations 2-5 -->
-                <!-- Animation 2 -->
-                <div class="animation-group">
-                    <h3>Animation 2</h3>
-                    <div class="input-group">
-                        <label>Original Animation ID</label>
-                        <input type="text" class="original-anim" placeholder="Enter original animation ID">
-                    </div>
-                    <div class="input-group">
-                        <label>Replacement Animation ID</label>
-                        <input type="text" class="replacement-anim" placeholder="Enter replacement animation ID">
-                    </div>
-                    <div class="animation-dropdown">
-                        <button class="dropdown-btn small">More things..</button>
-                        <div class="dropdown-content small">
-                            <div class="input-group">
-                                <label>Animation Speed</label>
-                                <input type="number" class="anim-speed" placeholder="1.0" step="0.1" min="0.1" value="1.0">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Animation 3 -->
-                <div class="animation-group">
-                    <h3>Animation 3</h3>
-                    <div class="input-group">
-                        <label>Original Animation ID</label>
-                        <input type="text" class="original-anim" placeholder="Enter original animation ID">
-                    </div>
-                    <div class="input-group">
-                        <label>Replacement Animation ID</label>
-                        <input type="text" class="replacement-anim" placeholder="Enter replacement animation ID">
-                    </div>
-                    <div class="animation-dropdown">
-                        <button class="dropdown-btn small">More things..</button>
-                        <div class="dropdown-content small">
-                            <div class="input-group">
-                                <label>Animation Speed</label>
-                                <input type="number" class="anim-speed" placeholder="1.0" step="0.1" min="0.1" value="1.0">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Animation 4 -->
-                <div class="animation-group">
-                    <h3>Animation 4</h3>
-                    <div class="input-group">
-                        <label>Original Animation ID</label>
-                        <input type="text" class="original-anim" placeholder="Enter original animation ID">
-                    </div>
-                    <div class="input-group">
-                        <label>Replacement Animation ID</label>
-                        <input type="text" class="replacement-anim" placeholder="Enter replacement animation ID">
-                    </div>
-                    <div class="animation-dropdown">
-                        <button class="dropdown-btn small">More things..</button>
-                        <div class="dropdown-content small">
-                            <div class="input-group">
-                                <label>Animation Speed</label>
-                                <input type="number" class="anim-speed" placeholder="1.0" step="0.1" min="0.1" value="1.0">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Animation 5 -->
-                <div class="animation-group">
-                    <h3>Animation 5</h3>
-                    <div class="input-group">
-                        <label>Original Animation ID</label>
-                        <input type="text" class="original-anim" placeholder="Enter original animation ID">
-                    </div>
-                    <div class="input-group">
-                        <label>Replacement Animation ID</label>
-                        <input type="text" class="replacement-anim" placeholder="Enter replacement animation ID">
-                    </div>
-                    <div class="animation-dropdown">
-                        <button class="dropdown-btn small">More things..</button>
-                        <div class="dropdown-content small">
-                            <div class="input-group">
-                                <label>Animation Speed</label>
-                                <input type="number" class="anim-speed" placeholder="1.0" step="0.1" min="0.1" value="1.0">
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <!-- Animation groups will be added dynamically -->
             </div>
             
-            <button id="add-anim-btn" class="btn add-btn">Add More Animations</button>
             <button id="skip-anim-btn" class="btn skip-btn">Skip It</button>
         </div>
-
-        <!-- VFX Editor Interface (hidden initially) -->
+        
+        <!-- New VFX Interface -->
         <div id="vfx-interface" class="hidden">
             <h1 class="title">VFX Editor</h1>
             
-            <div class="vfx-inputs">
-                <!-- VFX groups will be added here dynamically -->
+            <div id="vfx-container">
+                <!-- VFX groups will be added dynamically -->
             </div>
             
-            <button id="add-vfx-btn" class="btn add-btn">Add More VFX</button>
+            <button id="add-vfx-btn" class="btn">+ Add More VFX</button>
             <button id="skip-vfx-btn" class="btn skip-btn">Skip It</button>
         </div>
 
-        <!-- Script Generator Interface (hidden initially) -->
         <div id="script-generator-interface" class="hidden">
             <h1 class="title">Your Generated Script</h1>
             <div id="generating-message" class="generating-message">
