@@ -9,11 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const generatingMessage = document.getElementById('generating-message');
     const scriptOutputContainer = document.getElementById('script-output-container');
     
-    const discordBtn = document.getElementById('discord-btn');
-    const authButtons = document.getElementById('auth-buttons');
-    const userProfile = document.getElementById('user-profile');
-    const userAvatar = document.getElementById('user-avatar');
-    const usernameSpan = document.getElementById('username');
+    const completeVersionBtn = document.getElementById('complete-version-btn');
     const startBtn = document.querySelector('.start-btn');
     
     const skipMovesBtn = document.getElementById('skip-moves-btn');
@@ -25,11 +21,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const addAnimationBtn = document.getElementById('add-animation-btn');
     const addVfxBtn = document.getElementById('add-vfx-btn');
 
-    // Discord OAuth URL
-    const discordAuthUrl = 'https://discord.com/oauth2/authorize?client_id=1206450272428236810&redirect_uri=' + 
-                         encodeURIComponent('https://custommovesetmakerv20.netlify.app/auth.html') + 
-                         '&response_type=token&scope=identify';
-    
     // Setup main dropdown
     function setupMainDropdown() {
         const dropdownBtn = document.querySelector('.dropdown .dropdown-btn');
@@ -38,104 +29,23 @@ document.addEventListener('DOMContentLoaded', function() {
         if (dropdownBtn && dropdownContent) {
             dropdownBtn.addEventListener('click', function() {
                 dropdownContent.classList.toggle('active');
-                this.textContent = dropdownContent.classList.contains('active')
-                    ? 'Hide'
-                    : dropdownBtn.textContent === 'IMPORTANT: CLICK HERE' ? 'IMPORTANT: CLICK HERE' : 'Updates';
+                this.textContent = dropdownContent.classList.contains('active') ? 'Hide' : 'Updates';
             });
         }
     }
 
-    // Check authentication status
-    function checkAuthStatus() {
-        const token = sessionStorage.getItem('discord_token');
-        if (token) {
-            fetchDiscordUser(token);
-            setupLoggedInUI();
-        } else {
-            setupLoggedOutUI();
-        }
-        
-        // Check for auth errors
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.has('auth_error')) {
-            alert('Authentication failed. Please try again.');
-            window.history.replaceState({}, document.title, window.location.pathname);
-        }
-    }
-    
-    // Setup UI for logged-in users
-    function setupLoggedInUI() {
-        if (startBtn) {
-            startBtn.innerHTML = "Let's Start!";
-            startBtn.style.display = 'flex';
-        }
-        if (discordBtn) {
-            discordBtn.style.display = 'none';
-        }
-        if (authButtons) {
-            authButtons.style.display = 'flex';
-        }
-        
-        // Change dropdown
-        const dropdownBtn = document.querySelector('.dropdown-btn');
-        const dropdownContent = document.querySelector('.dropdown-content');
-        if (dropdownBtn && dropdownContent) {
-            dropdownBtn.textContent = 'Updates';
-            dropdownContent.innerHTML = `
-                <p>Updates: Custom Moveset Maker New Ui And Fixed All Shits Bug</p>
-            `;
-        }
-    }
-    
-    // Setup UI for logged-out users
-    function setupLoggedOutUI() {
-        if (startBtn) {
-            startBtn.innerHTML = 'Start!!<br><span class="subtext">without Sign in</span>';
-            startBtn.style.display = 'flex';
-        }
-        if (discordBtn) {
-            discordBtn.style.display = 'flex';
-        }
-        if (authButtons) {
-            authButtons.style.display = 'flex';
-        }
-        
-        // Reset dropdown
-        const dropdownBtn = document.querySelector('.dropdown-btn');
-        const dropdownContent = document.querySelector('.dropdown-content');
-        if (dropdownBtn && dropdownContent) {
-            dropdownBtn.textContent = 'IMPORTANT: CLICK HERE';
-            dropdownContent.innerHTML = `
-                <h3>Q - Why U Need Our Discord Account to Sign up?</h3>
-                <p>= To make sure I are keep connect With Us Always..</p>
-                
-                <ul class="security-list">
-                    <li>We DO NOT IP LOG OR ANYTHING</li>
-                    <li>We Just Get Your Username To Keep u Connect with us</li>
-                </ul>
-                
-                <h3>= Why We need to do it?</h3>
-                <p>- So u can Get In events and Updates!</p>
-                
-                <div class="signup-cta">
-                    <p>== SO Sign Up NOW..</p>
-                    <p>- If u are still worried about That it's some Ip log Website so Check Out this -</p>
-                    <a href="#" class="safety-link">Website Safety Information</a>
-                </div>
-            `;
-        }
-    }
-    
-    // Start button click handler
+    // Start button click handler (Test Version)
     startBtn.addEventListener('click', function() {
         initialInterface.classList.add('hidden');
         moveNamesInterface.classList.remove('hidden');
         setupMoveNamesInterface();
     });
     
-    // Discord button click handler
-    discordBtn.addEventListener('click', function() {
-        window.location.href = discordAuthUrl;
+    // Complete Version button click handler
+    completeVersionBtn.addEventListener('click', function() {
+        initialInterface.classList.add('hidden');
+        moveNamesInterface.classList.remove('hidden');
+        setupMoveNamesInterface();
     });
     
     // Setup move names interface
@@ -189,14 +99,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         skipAnimBtn.addEventListener('click', function() {
-            if (sessionStorage.getItem('discord_token')) {
-                animationEditorInterface.classList.add('hidden');
-                vfxEditorInterface.classList.remove('hidden');
-                setupVFXEditorInterface();
-            } else {
-                animationEditorInterface.classList.add('hidden');
-                generateScript();
-            }
+            animationEditorInterface.classList.add('hidden');
+            vfxEditorInterface.classList.remove('hidden');
+            setupVFXEditorInterface();
         });
     }
     
@@ -364,8 +269,7 @@ document.addEventListener('DOMContentLoaded', function() {
         scriptGeneratorInterface.classList.remove('hidden');
         generatingMessage.classList.remove('hidden');
         generatingMessage.innerHTML = `
-            <i class="fas fa-spinner fa-spin"></i> Your Script Is Getting Generated Please Wait...<br>
-            <span class="signup-message">Sign Up For More Features</span>
+            <i class="fas fa-spinner fa-spin"></i> Your Script Is Getting Generated Please Wait...
         `;
         scriptOutputContainer.classList.add('hidden');
         
@@ -395,26 +299,24 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        // Get VFX data (for logged-in users)
+        // Get VFX data
         const vfxData = [];
-        if (sessionStorage.getItem('discord_token')) {
-            const vfxGroups = document.querySelectorAll('.vfx-group');
+        const vfxGroups = document.querySelectorAll('.vfx-group');
+        
+        vfxGroups.forEach((group, index) => {
+            const path = group.querySelector('.vfx-path').value;
+            const move = group.querySelector('.move-select').value;
+            const destroyTime = group.querySelector('.destroy-time').value || "5";
             
-            vfxGroups.forEach((group, index) => {
-                const path = group.querySelector('.vfx-path').value;
-                const move = group.querySelector('.move-select').value;
-                const destroyTime = group.querySelector('.destroy-time').value || "5";
-                
-                if (path && move) {
-                    vfxData.push({
-                        index: index + 1,
-                        path,
-                        move,
-                        destroyTime
-                    });
-                }
-            });
-        }
+            if (path && move) {
+                vfxData.push({
+                    index: index + 1,
+                    path,
+                    move,
+                    destroyTime
+                });
+            }
+        });
         
         // Simulate generation delay (3 seconds)
         setTimeout(() => {
@@ -618,36 +520,6 @@ _G.v42()`;
         URL.revokeObjectURL(url);
     });
     
-    // Fetch Discord user data
-    async function fetchDiscordUser(token) {
-        try {
-            const response = await fetch('https://discord.com/api/users/@me', {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            
-            if (!response.ok) throw new Error('Failed to fetch user data');
-            
-            const user = await response.json();
-            updateUserUI(user);
-            
-        } catch (error) {
-            console.error('Error:', error);
-            sessionStorage.removeItem('discord_token');
-            alert('Session expired. Please sign in again.');
-            setupLoggedOutUI();
-        }
-    }
-    
-    // Update user UI
-    function updateUserUI(user) {
-        userProfile.classList.remove('hidden');
-        userAvatar.src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
-        usernameSpan.textContent = user.username;
-    }
-    
-    // Initial auth check
-    checkAuthStatus();
+    // Initial setup
     setupMainDropdown();
 });
